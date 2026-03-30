@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone, ExternalLink, Code2, Database, Layout, Terminal, Send, ChevronDown } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -16,6 +16,43 @@ const staggerContainer = {
     }
   }
 };
+
+const ROLES = [
+  "AI & Data Science Student",
+  "Full Stack Developer",
+  "React Developer",
+  "Python Enthusiast",
+  "Problem Solver",
+];
+
+function AnimatedRole() {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    const current = ROLES[roleIndex];
+    if (!isDeleting && displayed.length < current.length) {
+      timeoutRef.current = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 60);
+    } else if (!isDeleting && displayed.length === current.length) {
+      timeoutRef.current = setTimeout(() => setIsDeleting(true), 1800);
+    } else if (isDeleting && displayed.length > 0) {
+      timeoutRef.current = setTimeout(() => setDisplayed(current.slice(0, displayed.length - 1)), 35);
+    } else if (isDeleting && displayed.length === 0) {
+      setIsDeleting(false);
+      setRoleIndex((i) => (i + 1) % ROLES.length);
+    }
+    return () => clearTimeout(timeoutRef.current);
+  }, [displayed, isDeleting, roleIndex]);
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-2xl font-bold text-white">{displayed}</span>
+      <span className="inline-block w-0.5 h-7 bg-sky-400 animate-pulse" />
+    </div>
+  );
+}
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("hero");
@@ -174,17 +211,45 @@ export default function App() {
             viewport={{ once: true }}
             whileInView={{ opacity: 1, scale: 1 }}
             initial={{ opacity: 0, scale: 0.8 }}
-            className="relative"
+            className="relative flex flex-col gap-5"
           >
-            <div className="aspect-square bg-gradient-to-br from-sky-500 to-blue-600 rounded-3xl rotate-3 absolute inset-0 opacity-20 blur-2xl" />
-            <div className="aspect-square glass rounded-3xl flex items-center justify-center border-white/10 relative overflow-hidden group">
-              <Terminal size={120} className="text-sky-500/40 group-hover:scale-110 transition-transform duration-500" />
-              <div className="absolute bottom-6 left-6 right-6 p-4 glass rounded-xl border-white/10 text-sm font-mono leading-tight">
-                <span className="text-sky-400">Aryan:</span><span className="text-slate-300">~ $</span> cat goals.txt<br/>
-                <span className="text-slate-400">1. Build scalable AI tools</span><br/>
-                <span className="text-slate-400">2. Master Data Engineering</span><br/>
-                <span className="text-slate-400">3. Create user-centric UI</span>
+            {/* Animated Role Card */}
+            <div className="relative glass rounded-3xl p-8 border border-white/10 overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-sky-500/10 rounded-full blur-[60px] pointer-events-none" />
+              <p className="text-slate-500 text-xs font-mono mb-3 tracking-widest uppercase">Current Status</p>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span className="text-green-400 text-sm font-semibold">Open to opportunities</span>
               </div>
+              <AnimatedRole />
+              <p className="text-slate-500 text-sm mt-4 leading-relaxed">
+                Passionate about building AI-powered products that solve real-world problems with elegant, scalable code.
+              </p>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { value: "3+", label: "Projects Deployed", color: "text-sky-400" },
+                { value: "2+", label: "Years of Coding", color: "text-blue-400" },
+                { value: "10+", label: "Technologies", color: "text-violet-400" },
+                { value: "100%", label: "Passion for AI", color: "text-pink-400" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="glass rounded-2xl p-5 border border-white/5 hover:border-white/10 transition-colors group"
+                >
+                  <p className={`text-3xl font-bold mb-1 ${stat.color} group-hover:scale-110 transition-transform inline-block`}>{stat.value}</p>
+                  <p className="text-slate-500 text-xs">{stat.label}</p>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>
@@ -251,13 +316,17 @@ export default function App() {
               title: "LMS Platform",
               desc: "A comprehensive Learning Management System designed to streamline educational workflows and curated learning paths.",
               tech: ["React", "Node.js", "MongoDB"],
-              color: "from-sky-500/20 to-blue-600/20"
+              thumbnail: "/lms-thumbnail.png",
+              liveUrl: "https://ked-lms-academy.vercel.app",
+              githubUrl: "https://github.com/AryanBR04"
             },
             {
               title: "Netflix Cloud Clone",
               desc: "High-performance streaming interface with dynamic content loading and adaptive layout for all devices.",
               tech: ["Tailwind", "Firebase", "React"],
-              color: "from-red-500/20 to-purple-600/20"
+              thumbnail: "/netflix-thumbnail.png",
+              liveUrl: "https://client-lilac-one-91.vercel.app/",
+              githubUrl: "https://github.com/AryanBR04"
             }
           ].map((project, i) => (
             <motion.div 
@@ -265,15 +334,34 @@ export default function App() {
               whileHover={{ y: -5 }}
               className="group relative rounded-3xl bg-slate-900 border border-white/5 overflow-hidden"
             >
-              <div className={`h-64 bg-gradient-to-br ${project.color} flex items-center justify-center`}>
-                <Code2 size={60} className="text-white/20 group-hover:scale-125 transition-transform duration-700" />
+              <div className="h-64 relative overflow-hidden">
+                <img 
+                  src={project.thumbnail} 
+                  alt={project.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60" />
+                <a 
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  <span className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-5 py-2.5 rounded-full text-sm font-semibold">
+                    <ExternalLink size={16} /> Visit Live Site
+                  </span>
+                </a>
               </div>
               <div className="p-8">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-2xl font-bold text-white">{project.title}</h3>
                   <div className="flex gap-4 text-slate-400">
-                    <FaGithub size={20} className="hover:text-white cursor-pointer" />
-                    <ExternalLink size={20} className="hover:text-white cursor-pointer" />
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                      <FaGithub size={20} />
+                    </a>
+                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                      <ExternalLink size={20} />
+                    </a>
                   </div>
                 </div>
                 <p className="text-slate-400 mb-6 leading-relaxed">
@@ -316,12 +404,14 @@ export default function App() {
               </a>
             </div>
 
-            <motion.button
-              whileActive={{ scale: 0.95 }}
+            <motion.a
+              href="mailto:aryanrenake@gmail.com"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               className="px-12 py-5 bg-sky-500 hover:bg-sky-600 text-white rounded-2xl font-bold text-lg flex items-center gap-3 mx-auto shadow-2xl shadow-sky-500/30 transition-all"
             >
               Get In Touch <Send size={20} />
-            </motion.button>
+            </motion.a>
           </motion.div>
         </div>
       </section>
@@ -330,9 +420,9 @@ export default function App() {
       <footer className="py-12 px-6 border-t border-white/5 text-center">
         <p className="text-slate-500 mb-6">Designed & Built by Aryan B Renake</p>
         <div className="flex justify-center gap-6 text-slate-400">
-          <a href="#" className="hover:text-white transition-colors"><FaGithub size={20} /></a>
-          <a href="#" className="hover:text-white transition-colors"><FaLinkedin size={20} /></a>
-          <a href="#" className="hover:text-white transition-colors"><Mail size={20} /></a>
+          <a href="https://github.com/AryanBR04" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><FaGithub size={20} /></a>
+          <a href="https://www.linkedin.com/in/aryan-renake/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><FaLinkedin size={20} /></a>
+          <a href="mailto:aryanrenake@gmail.com" className="hover:text-white transition-colors"><Mail size={20} /></a>
         </div>
         <p className="mt-8 text-xs text-slate-600">© 2026 all rights reserved</p>
       </footer>
