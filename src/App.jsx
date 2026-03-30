@@ -56,6 +56,13 @@ function AnimatedRole() {
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("hero");
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText("aryanrenake@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -396,22 +403,22 @@ export default function App() {
             </p>
             
             <div className="grid sm:grid-cols-2 gap-4 mb-12 max-w-lg mx-auto">
-              <a href="mailto:aryanrenake@gmail.com" className="flex items-center justify-center gap-3 p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-white/5">
+              <button onClick={copyEmail} className="flex items-center justify-center gap-3 p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-white/5 cursor-pointer">
                 <Mail size={20} className="text-sky-400" /> aryanrenake@gmail.com
-              </a>
+              </button>
               <a href="tel:+918088232020" className="flex items-center justify-center gap-3 p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-white/5">
                 <Phone size={20} className="text-sky-400" /> +91 8088232020
               </a>
             </div>
 
-            <motion.a
-              href="mailto:aryanrenake@gmail.com"
+            <motion.button
+              onClick={copyEmail}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className="px-12 py-5 bg-sky-500 hover:bg-sky-600 text-white rounded-2xl font-bold text-lg flex items-center gap-3 mx-auto shadow-2xl shadow-sky-500/30 transition-all"
             >
-              Get In Touch <Send size={20} />
-            </motion.a>
+              {copied ? "✅ Email Copied!" : <>Get In Touch <Send size={20} /></>}
+            </motion.button>
           </motion.div>
         </div>
       </section>
