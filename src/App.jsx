@@ -278,9 +278,9 @@ export default function App() {
             className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {[
-              { title: "Programming", icon: <Code2 />, skills: ["Python", "JavaScript", "C++"] },
+              { title: "Programming", icon: <Code2 />, skills: ["Python", "JavaScript"] },
               { title: "Core CS", icon: <Database />, skills: ["DSA", "OOP", "DBMS"] },
-              { title: "Tools", icon: <Terminal />, skills: ["Git", "Docker", "VS Code"] },
+              { title: "Tools", icon: <Terminal />, skills: ["Git", "VS Code"] },
               { title: "Frontend", icon: <Layout />, skills: ["React", "Tailwind", "Next.js"] }
             ].map((category, i) => (
               <motion.div 
@@ -317,14 +317,22 @@ export default function App() {
           </a>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-10">
           {[
             {
-              title: "LMS Platform",
-              desc: "A comprehensive Learning Management System designed to streamline educational workflows and curated learning paths.",
-              tech: ["React", "Node.js", "MongoDB"],
-              thumbnail: "/lms-thumbnail.png",
-              liveUrl: "https://ked-lms-academy.vercel.app",
+              title: "Job Notification Tracker",
+              desc: "A comprehensive platform to track job applications, manage saved opportunities, and maintain user profiles with an intuitive dashboard.",
+              tech: ["React", "Vite", "Tailwind"],
+              thumbnail: "/job-thumbnail.png",
+              liveUrl: "https://job-ten-hazel.vercel.app",
+              githubUrl: "https://github.com/AryanBR04"
+            },
+            {
+              title: "SmartMoney",
+              desc: "A full-stack financial management application to track personal finances, expenses, and investments efficiently.",
+              tech: ["React", "Flask", "Tailwind"],
+              thumbnail: "/smartmoney-thumbnail.png",
+              liveUrl: "https://smartmoney-zeta.vercel.app/",
               githubUrl: "https://github.com/AryanBR04"
             },
             {
